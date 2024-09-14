@@ -1,7 +1,3 @@
-//
-// Created by Misha on 12.09.2024.
-//
-
 #ifndef OOD_2_CSTATISTICS_H
 #define OOD_2_CSTATISTICS_H
 
