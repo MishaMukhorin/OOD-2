@@ -29,8 +29,11 @@ public:
 	virtual ~IObservable() = default;
 
     [[maybe_unused]] virtual void RegisterObserver(IObserver<T> & observer, int priority) = 0;
+    [[maybe_unused]] virtual void RegisterObserver(IObserver<T> & observer) = 0;
 	virtual void NotifyObservers() = 0;
 	virtual void RemoveObserver(IObserver<T> & observer) = 0;
+
+    static const int DEFAULT_PRIORITY = 5;
 };
 
 // Реализация интерфейса IObservable
@@ -43,6 +46,11 @@ public:
     void RegisterObserver(ObserverType& observer, int priority) override
     {
         m_observers[priority].insert(&observer);
+    }
+
+    void RegisterObserver(ObserverType& observer) override
+    {
+        m_observers[IObservable<T>::DEFAULT_PRIORITY].insert(&observer);
     }
 
     void NotifyObservers() override
