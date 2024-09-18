@@ -1,8 +1,9 @@
 ﻿#pragma once
 
-#include <set>
+#include <unordered_set>
 #include <functional>
 #include <map>
+
 
 template <typename T>
 class IObserver;
@@ -33,18 +34,24 @@ public:
 
     void RegisterObserver(ObserverType& observer, int priority) override
     {
-        m_observers[priority].insert(&observer);
+        if (!m_observers.contains(priority))
+        {
+            m_observers.insert({priority, {}});
+        }
+        m_observers.at(priority).insert(&observer);
     }
 
     void RegisterObserver(ObserverType& observer) override
     {
-        m_observers[5].insert(&observer);
+        m_observers.insert({5, {}});
+        m_observers.at(5).insert(&observer);
+
     }
 
     void NotifyObservers() override
     {
         T data = GetChangedData();
-        auto observersCopy = m_observers; // #2
+        auto observersCopy = m_observers;
         for (auto it = observersCopy.rbegin(); it != observersCopy.rend(); ++it)
         {
             for (auto& observer : it->second)
@@ -70,7 +77,7 @@ protected:
 	virtual T GetChangedData() const = 0;
 
 private:
-    std::map<int, std::set<ObserverType*>> m_observers;
+    std::map<int, std::unordered_set<ObserverType*>> m_observers;
 };
 
 

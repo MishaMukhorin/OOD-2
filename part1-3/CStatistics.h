@@ -3,6 +3,7 @@
 
 #include <limits>
 
+//Возвращает минимальную температуру либо +inf если не было вызвано
 class CStatistics
 {
 public:

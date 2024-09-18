@@ -5,7 +5,7 @@ class SelfRemovingObserver : public IObserver<SWeatherInfo>
 {
 public:
 
-    explicit SelfRemovingObserver(CObservable<SWeatherInfo>& observable): m_observable(observable)
+    SelfRemovingObserver(CObservable<SWeatherInfo>& observable): m_observable(observable)
     {
     }
 
@@ -18,14 +18,13 @@ public:
 private:
     CObservable<SWeatherInfo>& m_observable;
 };
-
 TEST(ObserverTests, TestRemoveObserverDuringNotify)
 {
 
     CWeatherData wd;
 
     CDisplay display1;
-    wd.RegisterObserver(display1, 5);
+    wd.RegisterObserver(display1);
     SelfRemovingObserver selfRemovingObserver(wd);
     wd.RegisterObserver(selfRemovingObserver);
 

@@ -1,4 +1,4 @@
-#include "WeatherData.h"
+#include "../part1-3/WeatherData.h"
 
 int main()
 {
@@ -7,7 +7,7 @@ int main()
 	CDisplay display;
 	wd.RegisterObserver(display, 5);
 
-	CStatsDisplay statsDisplay;
+	CStatsDisplayProDuo statsDisplay;
 	wd.RegisterObserver(statsDisplay, 1);
 
 	wd.SetMeasurements(3, 0.7, 760);

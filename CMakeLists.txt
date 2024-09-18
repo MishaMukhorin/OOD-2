@@ -1,14 +1,28 @@
 cmake_minimum_required(VERSION 3.24)
 project(OOD_2)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
-include_directories(part4-5)
 
 add_executable(WeatherStation
-        part4-5/main.cpp
-        part4-5/Observer.h
-        part4-5/WeatherData.h)
+        part7-2/main.cpp
+        part7-2/Observer.h
+        part7-2/WeatherData.h)
+
+add_executable(WeatherStation7
+        part7/main.cpp
+        part7/Observer.h
+        part7/WeatherData.h)
+
+add_executable(WeatherStation2
+        part4-6/main.cpp
+        part4-6/Observer.h
+        part4-6/WeatherData.h)
+
+add_executable(WeatherStation1
+        part1-3/main.cpp
+        part1-3/Observer.h
+        part1-3/WeatherData.h)
 
 # Enable testing
 enable_testing()
@@ -23,9 +37,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(WeatherTests
-        part4-5/tests/WeatherTests.cpp
-        part4-5/Observer.h
-        part4-5/WeatherData.h)
+        part4-6/tests/WeatherTests.cpp
+        part4-6/Observer.h
+        part4-6/WeatherData.h)
 
 add_executable(WeatherTests1
         part1-3/tests/WeatherTests.cpp

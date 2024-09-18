@@ -4,21 +4,9 @@
 #include <functional>
 #include <map>
 
-const int DEFAULT_PRIORITY = 5;
 
-/*
-Шаблонный интерфейс IObserver. Его должен реализовывать класс,
-желающий получать уведомления от соответствующего IObservable
-Параметром шаблона является тип аргумента,
-передаваемого Наблюдателю в метод Update
-*/
 template <typename T>
-class IObserver
-{
-public:
-	virtual void Update(T const& data) = 0;
-	virtual ~IObserver() = default;
-};
+class IObserver;
 
 /*
 Шаблонный интерфейс IObservable. Позволяет подписаться и отписаться на оповещения,
@@ -30,16 +18,11 @@ class IObservable
 public:
 	virtual ~IObservable() = default;
 
-    [[maybe_unused]] void RegisterObserver(IObserver<T> & observer, int priority = 5)
-    {
-        RegisterObserverImpl(observer, priority);
-    }
-    virtual void NotifyObservers() = 0;
-    virtual void RemoveObserver(IObserver<T> & observer) = 0;
-protected:
-    
-    [[maybe_unused]] virtual void RegisterObserverImpl(IObserver<T> & observer, int priority) = 0;
-// todo done non virtual interface
+    [[maybe_unused]] virtual void RegisterObserver(IObserver<T> & observer, int priority) = 0;
+    [[maybe_unused]] virtual void RegisterObserver(IObserver<T> & observer) = 0;
+	virtual void NotifyObservers() = 0;
+	virtual void RemoveObserver(IObserver<T> & observer) = 0;
+
 };
 
 // Реализация интерфейса IObservable
@@ -49,7 +32,7 @@ class CObservable : public IObservable<T>
 public:
     typedef IObserver<T> ObserverType;
 
-    void RegisterObserverImpl(ObserverType& observer, int priority) override
+    void RegisterObserver(ObserverType& observer, int priority) override
     {
         if (!m_observers.contains(priority))
         {
@@ -58,15 +41,22 @@ public:
         m_observers.at(priority).insert(&observer);
     }
 
+    void RegisterObserver(ObserverType& observer) override
+    {
+        m_observers.insert({5, {}});
+        m_observers.at(5).insert(&observer);
+
+    }
+
     void NotifyObservers() override
     {
         T data = GetChangedData();
-        auto observersCopy = m_observers; // #2
+        auto observersCopy = m_observers;
         for (auto it = observersCopy.rbegin(); it != observersCopy.rend(); ++it)
         {
             for (auto& observer : it->second)
             {
-                observer->Update(data);
+                observer->Update(data, this);
             }
         }
     }
@@ -87,6 +77,20 @@ protected:
 	virtual T GetChangedData() const = 0;
 
 private:
-    //сделать быстрое удаление
     std::map<int, std::unordered_set<ObserverType*>> m_observers;
+};
+
+
+/*
+Шаблонный интерфейс IObserver. Его должен реализовывать класс,
+желающий получать уведомления от соответствующего IObservable
+Параметром шаблона является тип аргумента,
+передаваемого Наблюдателю в метод Update
+*/
+template <typename T>
+class IObserver
+{
+public:
+    virtual void Update(T const& data, const CObservable<T>* observable) = 0;
+    virtual ~IObserver() = default;
 };

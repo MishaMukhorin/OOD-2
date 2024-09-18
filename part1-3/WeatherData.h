@@ -29,7 +29,7 @@ private:
 	}
 };
 
-class CStatsDisplay : public IObserver<SWeatherInfo>
+class CStatsDisplayProDuo : public IObserver<SWeatherInfo>
 {
 private:
 	/* Метод Update сделан приватным, чтобы ограничить возможность его вызова напрямую
@@ -96,7 +96,7 @@ public:
 		MeasurementsChanged();
 	}
 protected:
-	[[nodiscard]] SWeatherInfo GetChangedData()const override
+	[[nodiscard]] SWeatherInfo GetChangedData() const override
 	{
 		SWeatherInfo info;
 		info.temperature = GetTemperature();
