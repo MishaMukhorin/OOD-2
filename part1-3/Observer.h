@@ -5,7 +5,7 @@
 #include <map>
 
 /*
-Шаблонный интерфейс IObserver. Его должен реализовывать класс, 
+Шаблонный интерфейс IObserver. Его должен реализовывать класс,
 желающий получать уведомления от соответствующего IObservable
 Параметром шаблона является тип аргумента,
 передаваемого Наблюдателю в метод Update
@@ -19,8 +19,8 @@ public:
 };
 
 /*
-Шаблонный интерфейс IObservable. Позволяет подписаться и отписаться на оповещения, а также
-инициировать рассылку уведомлений зарегистрированным наблюдателям.
+Шаблонный интерфейс IObservable. Позволяет подписаться и отписаться на оповещения,
+а также инициировать рассылку уведомлений зарегистрированным наблюдателям.
 */
 template <typename T>
 class IObservable
@@ -33,7 +33,6 @@ public:
 	virtual void NotifyObservers() = 0;
 	virtual void RemoveObserver(IObserver<T> & observer) = 0;
 
-    static const int DEFAULT_PRIORITY = 5;
 };
 
 // Реализация интерфейса IObservable
@@ -50,7 +49,7 @@ public:
 
     void RegisterObserver(ObserverType& observer) override
     {
-        m_observers[IObservable<T>::DEFAULT_PRIORITY].insert(&observer);
+        m_observers[5].insert(&observer);
     }
 
     void NotifyObservers() override
